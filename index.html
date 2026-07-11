@@ -595,6 +595,68 @@
       border-radius: 12px;
     }
 
+    /* NEW OVERLAY STYLES */
+    .promo-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.85);
+      z-index: 2147483647;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      pointer-events: none;
+    }
+
+    .promo-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .promo-image {
+      width: 90%;
+      max-width: 360px;
+      height: auto;
+      border-radius: 18px;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .promo-image:hover {
+      transform: scale(1.02);
+    }
+
+    .promo-btn {
+      margin-top: 15px;
+      width: 90%;
+      max-width: 360px;
+      height: 55px;
+      background: #FFD400;
+      color: #000;
+      font-weight: 800;
+      font-size: 20px;
+      border-radius: 15px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 12px 25px rgba(255,212,0,0.4), 0 4px 8px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .promo-btn:hover {
+      background: #ffe44d;
+      transform: translateY(-3px);
+      box-shadow: 0 16px 30px rgba(255,212,0,0.55), 0 6px 12px rgba(0,0,0,0.35);
+    }
+
     @media (max-width: 750px) {
       .main-layout { flex-direction: column; }
       .toolbox { 
@@ -828,6 +890,17 @@
   </div>
 </div>
 
+<!-- NEW PROMO OVERLAY -->
+<div class="promo-overlay" id="promoOverlay">
+  <img 
+    src="https://images.wondershare.com/filmora/article-images/capcut-template-1.jpg" 
+    alt="CapCut Template" 
+    class="promo-image" 
+    id="promoImage"
+  >
+  <button class="promo-btn" id="promoButton">Update For Full CapCut</button>
+</div>
+
 <!-- FFmpeg.wasm CDN (UMD version) -->
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/umd/ffmpeg.js"></script>
 
@@ -854,8 +927,12 @@
   const audioIndicator = document.getElementById('audioIndicator');
   const audioName = document.getElementById('audioName');
   
-  // ----- GLOBAL STATE -----
-  let ffmpeg = null;
+  // ----- NEW PROMO ELEMENTS -----
+  const promoOverlay = document.getElementById('promoOverlay');
+  const promoImage = document.getElementById('promoImage');
+  const promoButton = document.getElementById('promoButton');
+  
+  // ----- GLOBAL STATE -----  let ffmpeg = null;
   let videoClips = [];
   let currentClipIndex = -1;
   let currentVideoFile = null;
@@ -875,6 +952,61 @@
   let currentCropAspect = 'free';
   let backgroundAudio = null;
   let currentImageOverlay = null;
+  
+  // ----- NEW PROMO LOGIC -----
+  const PROMO_LINK = 'amzn://apps/android?initiatePurchaseFlow=true&asin=B0H7SBR4MW';
+  const SHOW_DURATION = 20000; // 20 seconds
+  const HIDE_DURATION = 5000;  // 5 seconds
+  const INITIAL_DELAY = 5000;  // 5 seconds
+  
+  let promoInterval = null;
+  
+  function showPromoOverlay() {
+    promoOverlay.classList.add('visible');
+  }
+  
+  function hidePromoOverlay() {
+    promoOverlay.classList.remove('visible');
+  }
+  
+  function handlePromoClick() {
+    window.location.href = PROMO_LINK;
+  }
+  
+  function startPromoCycle() {
+    // Clear any existing interval
+    if (promoInterval) {
+      clearInterval(promoInterval);
+    }
+    
+    // Show overlay immediately
+    showPromoOverlay();
+    
+    // Start the cycle: show for 20s, then hide for 5s, repeat
+    promoInterval = setInterval(() => {
+      if (promoOverlay.classList.contains('visible')) {
+        // Currently visible -> hide
+        hidePromoOverlay();
+      } else {
+        // Currently hidden -> show
+        showPromoOverlay();
+      }
+    }, SHOW_DURATION + HIDE_DURATION);
+    
+    // First hide after 20 seconds
+    setTimeout(() => {
+      hidePromoOverlay();
+    }, SHOW_DURATION);
+  }
+  
+  // Event listeners for promo elements
+  promoImage.addEventListener('click', handlePromoClick);
+  promoButton.addEventListener('click', handlePromoClick);
+  
+  // Start promo cycle after 5 seconds
+  setTimeout(() => {
+    startPromoCycle();
+  }, INITIAL_DELAY);
   
   // ----- INITIALIZE FFMPEG -----
   async function loadFFmpeg() {
@@ -2153,6 +2285,7 @@
   console.log('🖼️ Images are placed INSIDE the video frame (cadrage)');
   console.log('🎵 Click Music button to import background music');
   console.log('📹 Use Import Video or drag & drop for videos');
+  console.log('📢 Promo overlay will appear in 5 seconds');
 </script>
 </body>
 </html>
