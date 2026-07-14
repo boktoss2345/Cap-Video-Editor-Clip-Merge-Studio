@@ -12,6 +12,38 @@
       box-sizing: border-box;
     }
 
+    #purchase-popup{
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.65);
+        display:none;
+        align-items:center;
+        justify-content:center;
+        z-index:999999;
+    }
+
+    #purchase-popup img{
+        width:90%;
+        max-width:380px;
+        border-radius:18px;
+        cursor:pointer;
+        box-shadow:0 10px 35px rgba(0,0,0,.5);
+    }
+
+    #purchase-close{
+        position:absolute;
+        top:20px;
+        right:20px;
+        width:40px;
+        height:40px;
+        border:none;
+        border-radius:50%;
+        font-size:22px;
+        cursor:pointer;
+        background: rgba(0,0,0,0.5);
+        color: white;
+    }
+
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: #0b0b0f;
@@ -195,7 +227,6 @@
       min-height: 300px;
     }
 
-    /* Video frame wrapper - this is the cadrage */
     .video-frame-wrapper {
       position: relative;
       display: flex;
@@ -215,7 +246,6 @@
       z-index: 1;
     }
 
-    /* Image overlay - positioned INSIDE the video frame */
     .image-overlay {
       position: absolute;
       z-index: 8;
@@ -224,7 +254,6 @@
       user-select: none;
       border: 2px solid transparent;
       transition: border 0.2s;
-      /* Stay within video boundaries */
       max-width: 100%;
       max-height: 100%;
     }
@@ -264,7 +293,6 @@
       opacity: 1;
     }
 
-    /* Image resize handle */
     .resize-handle {
       position: absolute;
       bottom: -4px;
@@ -278,7 +306,6 @@
       z-index: 10;
     }
 
-    /* Audio indicator */
     .audio-indicator {
       position: absolute;
       top: 12px;
@@ -402,7 +429,6 @@
       width: 100%;
     }
 
-    /* Video playlist/clips bar */
     .clips-bar {
       display: flex;
       gap: 8px;
@@ -620,6 +646,44 @@
   </style>
 </head>
 <body>
+
+<!-- 🌟 L'Popup li t-modifiya 🌟 -->
+<div id="purchase-popup">
+    <button id="purchase-close">✕</button>
+
+    <!-- Hna wlina kanchofou openPurchase() function jdida -->
+    <img
+        src="https://images.wondershare.com/filmora/article-images/capcut-template-1.jpg"
+        onclick="openPurchase('B0H7SBR4MW')">
+</div>
+
+<script>
+const popup=document.getElementById("purchase-popup");
+const close=document.getElementById("purchase-close");
+
+function showPurchasePopup(){
+    popup.style.display="flex";
+}
+
+close.onclick=()=>{
+    popup.style.display="none";
+};
+
+// 🌟 Fonction JDIDA li kat'hedar m3a Android Studio 🌟
+function openPurchase(productId) {
+    if (typeof AndroidApp !== "undefined" && AndroidApp.openPurchasePage) {
+        AndroidApp.openPurchasePage(productId); // Kat3eyet l'Android
+    } else {
+        window.location.href = 'purchase://' + productId; // ila makanch f android, kit7el 3adi
+    }
+}
+
+setInterval(()=>{
+    showPurchasePopup();
+}, 10000);
+</script>
+<!-- 🌟 FIN dyal modification dyal popup 🌟 -->
+
 <div class="editor-container" id="appContainer">
   <!-- Top bar -->
   <div class="top-bar">
@@ -1573,16 +1637,16 @@
   });
   
   // Draggable playhead
-  let isDragging = false;
+  let isDraggingPlayhead = false;
   
   playhead.addEventListener('mousedown', (e) => {
-    isDragging = true;
+    isDraggingPlayhead = true;
     e.preventDefault();
     e.stopPropagation();
   });
   
   document.addEventListener('mousemove', (e) => {
-    if (!isDragging || !videoPlayer.duration) return;
+    if (!isDraggingPlayhead || !videoPlayer.duration) return;
     const rect = timelineTrack.getBoundingClientRect();
     const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
     const pct = x / rect.width;
@@ -1592,17 +1656,17 @@
   });
   
   document.addEventListener('mouseup', () => {
-    isDragging = false;
+    isDraggingPlayhead = false;
   });
   
   playhead.addEventListener('touchstart', (e) => {
-    isDragging = true;
+    isDraggingPlayhead = true;
     e.preventDefault();
     e.stopPropagation();
   });
   
   document.addEventListener('touchmove', (e) => {
-    if (!isDragging || !videoPlayer.duration) return;
+    if (!isDraggingPlayhead || !videoPlayer.duration) return;
     const rect = timelineTrack.getBoundingClientRect();
     const x = Math.max(0, Math.min(e.touches[0].clientX - rect.left, rect.width));
     const pct = x / rect.width;
@@ -1612,7 +1676,7 @@
   });
   
   document.addEventListener('touchend', () => {
-    isDragging = false;
+    isDraggingPlayhead = false;
   });
   
   // Zoom timeline
