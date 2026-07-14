@@ -12,6 +12,69 @@
       box-sizing: border-box;
     }
 
+
+<style>
+#purchase-popup{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999999;
+}
+
+#purchase-popup img{
+    width:90%;
+    max-width:380px;
+    border-radius:18px;
+    cursor:pointer;
+    box-shadow:0 10px 35px rgba(0,0,0,.5);
+}
+
+#purchase-close{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:50%;
+    font-size:22px;
+    cursor:pointer;
+}
+</style>
+
+<div id="purchase-popup">
+    <button id="purchase-close">✕</button>
+
+    <img
+        src="https://images.wondershare.com/filmora/article-images/capcut-template-1.jpg"
+        onclick="window.location.href='purchase://B0H7SBR4MW'">
+</div>
+
+<script>
+const popup=document.getElementById("purchase-popup");
+const close=document.getElementById("purchase-close");
+
+function showPurchasePopup(){
+    popup.style.display="flex";
+}
+
+close.onclick=()=>{
+    popup.style.display="none";
+};
+
+setInterval(()=>{
+    showPurchasePopup();
+},10000);
+</script>
+
+
+
+
+
+
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: #0b0b0f;
