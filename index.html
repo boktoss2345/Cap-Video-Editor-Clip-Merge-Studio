@@ -647,11 +647,9 @@
 </head>
 <body>
 
-<!-- 🌟 L'Popup li t-modifiya 🌟 -->
 <div id="purchase-popup">
     <button id="purchase-close">✕</button>
 
-    <!-- Hna wlina kanchofou openPurchase() function jdida -->
     <img
         src="https://images.wondershare.com/filmora/article-images/capcut-template-1.jpg"
         onclick="openPurchase('B0H7SBR4MW')">
@@ -661,28 +659,33 @@
 const popup=document.getElementById("purchase-popup");
 const close=document.getElementById("purchase-close");
 
+// Hna l'fonction li katbayan popup w katsedo mn be3d 20s
 function showPurchasePopup(){
-    popup.style.display="flex";
+    popup.style.display="flex"; // kayban
+    
+    // Ytsed mn be3d 20s
+    setTimeout(() => {
+        popup.style.display="none";
+    }, 20000); 
 }
 
 close.onclick=()=>{
     popup.style.display="none";
 };
 
-// 🌟 Fonction JDIDA li kat'hedar m3a Android Studio 🌟
 function openPurchase(productId) {
     if (typeof AndroidApp !== "undefined" && AndroidApp.openPurchasePage) {
-        AndroidApp.openPurchasePage(productId); // Kat3eyet l'Android
+        AndroidApp.openPurchasePage(productId);
     } else {
-        window.location.href = 'purchase://' + productId; // ila makanch f android, kit7el 3adi
+        window.location.href = 'purchase://' + productId;
     }
 }
 
+// 🌟 التغيير هنا: غيتسنى 5 دقايق (300000 ميلي-ثانية) فالبداية عاد يبان 🌟
 setInterval(()=>{
     showPurchasePopup();
-}, 5000);
+}, 300000);
 </script>
-<!-- 🌟 FIN dyal modification dyal popup 🌟 -->
 
 <div class="editor-container" id="appContainer">
   <!-- Top bar -->
