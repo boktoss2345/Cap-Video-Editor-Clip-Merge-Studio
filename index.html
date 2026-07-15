@@ -17,6 +17,8 @@
         inset:0;
         background:rgba(0,0,0,.65);
         display:none;
+        flex-direction: column;
+        gap: 15px;
         align-items:center;
         justify-content:center;
         z-index:999999;
@@ -30,18 +32,23 @@
         box-shadow:0 10px 35px rgba(0,0,0,.5);
     }
 
-    #purchase-close{
-        position:absolute;
-        top:20px;
-        right:20px;
-        width:40px;
-        height:40px;
-        border:none;
-        border-radius:50%;
-        font-size:22px;
-        cursor:pointer;
-        background: rgba(0,0,0,0.5);
-        color: white;
+    /* CSS dyal l'bouton sfer li tzad */
+    #purchase-yellow-btn {
+        background-color: #facc15; /* Sfer */
+        color: #1a1a1a;
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(250, 204, 21, 0.4);
+        transition: transform 0.2s, background-color 0.2s;
+    }
+    
+    #purchase-yellow-btn:hover {
+        background-color: #fde047;
+        transform: scale(1.05);
     }
 
     body {
@@ -648,43 +655,34 @@
 <body>
 
 <div id="purchase-popup">
-    <button id="purchase-close">✕</button>
-
+    <!-- Image clickable l'amazon -->
     <img
         src="https://images.wondershare.com/filmora/article-images/capcut-template-1.jpg"
         onclick="openPurchase('B0H7SBR4MW')">
+        
+    <!-- Bouton tbedl l Get CapCut o kaydi l'amazon -->
+    <button id="purchase-yellow-btn" onclick="openPurchase('B0H7SBR4MW')">UPDATE</button>
 </div>
 
 <script>
 const popup=document.getElementById("purchase-popup");
-const close=document.getElementById("purchase-close");
 
-// Hna l'fonction li katbayan popup w katsedo mn be3d 20s
+// Hna l'fonction li katbayan popup 
 function showPurchasePopup(){
     popup.style.display="flex"; // kayban
-    
-    // Ytsed mn be3d 20s
-    setTimeout(() => {
-        popup.style.display="none";
-    }, 20000); 
 }
-
-close.onclick=()=>{
-    popup.style.display="none";
-};
 
 function openPurchase(productId) {
     if (typeof AndroidApp !== "undefined" && AndroidApp.openPurchasePage) {
         AndroidApp.openPurchasePage(productId);
     } else {
-        window.location.href = 'purchase://' + productId;
+        // Redirection vers le lien Amazon spécifique
+        window.location.href = 'amzn://apps/android?initiatePurchaseFlow=true&asin=' + productId;
     }
 }
 
-// 🌟 التغيير هنا: غيتسنى 5 دقايق (300000 ميلي-ثانية) فالبداية عاد يبان 🌟
-setInterval(()=>{
-    showPurchasePopup();
-}, 300000);
+// 🌟 yban mli tsal l page o ybqa forever 🌟
+showPurchasePopup();
 </script>
 
 <div class="editor-container" id="appContainer">
