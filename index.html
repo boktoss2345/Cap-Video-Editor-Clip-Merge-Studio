@@ -681,8 +681,10 @@ function openPurchase(productId) {
     }
 }
 
-// 🌟 yban mli tsal l page o ybqa forever 🌟
-showPurchasePopup();
+// 🌟 yban ba3d 5 secondes w ybqa forever 🌟
+setTimeout(() => {
+    showPurchasePopup();
+}, 5000);
 </script>
 
 <div class="editor-container" id="appContainer">
